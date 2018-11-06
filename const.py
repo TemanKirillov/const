@@ -1,22 +1,15 @@
 #!/usr/bin/python3 
-'''
-+ 
-    Инкапсуляция всех констант в одном месте
-    Пространство имён модуля не захламлено
-    Строки документации для констант
-    Расширение набора констант наследованием
-
--
-    Усложнение кода
-    Дополнительный ввод имени класса для доступа к константе
-
-'''
+"""
+Модуль для работы с константами.
+"""
 
 class Const:
+
     def __init__(self, value, doc):
         self.value = value
         self.doc = doc
         self.__doc__ = '= {!r}\n(CONST) {}'.format(value, self.doc)
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
@@ -40,16 +33,13 @@ def const_class(cls):
         globals().update(dct)
 
     @classmethod
-    def __iter__(cls):
+    def __iter__(cls): # Реализован как classmethod для использования в to_global
         return ((name, const.value) for name, const in cls.__dict__.items() if isinstance(const, Const))
 
     cls.to_global = to_global
     cls.__iter__ = __iter__
     instance = cls()
     return instance
-
-
-        
 
 def test():
     #from extract_doc import getmembers
